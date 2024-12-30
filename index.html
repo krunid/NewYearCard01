@@ -3,381 +3,265 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบส่งการ์ดอวยพรปีใหม่</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <title>ส่งคำอวยพรปีใหม่ 2025</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <style>
-        :root {
-            --primary-color: #e74c3c;
-            --secondary-color: #f1c40f;
-            --background-color: #f8f9fa;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Sarabun', sans-serif;
-        }
-
+        @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap');
+        
         body {
-            background-color: var(--background-color);
+            font-family: 'Prompt', sans-serif;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             min-height: 100vh;
-            padding: 2rem;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .tab {
-            padding: 0.5rem 1rem;
-            background: #eee;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .tab.active {
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .panel {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-
-        .panel.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-
-        input, select, textarea {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        textarea {
-            height: 150px;
-            resize: vertical;
-        }
-
-        .preview-card {
-            border: 1px solid #ddd;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            background: #fff;
-        }
-
-        .button {
-            background: var(--primary-color);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-            font-size: 1rem;
-        }
-
-        .button:hover {
-            opacity: 0.9;
-        }
-
-        .recipient-list {
-            border: 1px solid #ddd;
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1rem;
-            max-height: 200px;
-            overflow-y: auto;
-        }
-
-        .recipient {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.5rem;
-            border-bottom: 1px solid #eee;
-        }
-
-        .recipient:last-child {
-            border-bottom: none;
-        }
-
-        .remove-btn {
-            background: #dc3545;
-            color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            cursor: pointer;
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        /* Progress indicator */
-        .progress-container {
-            display: none;
-            margin-top: 1rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background-color: #f0f0f0;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        .progress {
-            width: 0%;
-            height: 100%;
-            background-color: var(--primary-color);
-            transition: width 0.3s ease;
-        }
-
-        /* Response messages */
-        .message {
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 5px;
-        }
-
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            .tabs {
-                flex-direction: column;
-            }
-
-            .tab {
-                width: 100%;
-                text-align: center;
-            }
+        .snow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🎉 ระบบส่งการ์ดอวยพรปีใหม่ 2025 🎊</h1>
+<body class="p-4">
+    <!-- ปุ่มวิธีใช้งาน -->
+    <button onclick="showGuide()" class="fixed top-4 right-4 bg-white p-3 rounded-full shadow-lg hover:bg-gray-50 z-10">
+        <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+    </button>
 
-        <div class="tabs">
-            <button class="tab active" data-tab="line">Line</button>
-            <button class="tab" data-tab="telegram">Telegram</button>
-            <button class="tab" data-tab="settings">ตั้งค่า</button>
-        </div>
-
-        <div class="panel active" id="line-panel">
-            <div class="form-group">
-                <label>Line Notify Token:</label>
-                <input type="text" id="line-token" placeholder="กรอก Line Notify Token">
+    <!-- ฟอร์มหลัก -->
+    <div class="container max-w-xl mx-auto relative z-10">
+        <div class="glass-card rounded-2xl p-8">
+            <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">🎉 ส่งคำอวยพรปีใหม่ 2025</h1>
+            
+            <form id="greetingForm" class="space-y-6">
+                <!-- เลือกแพลตฟอร์ม -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">เลือกแพลตฟอร์ม</label>
+                    <div class="flex space-x-4 mb-2">
+                        <label class="flex-1">
+                            <input type="radio" name="platform" value="line" checked
+                                   class="sr-only peer">
+                            <div class="flex items-center justify-center p-4 border-2 rounded-lg peer-checked:border-green-500 peer-checked:bg-green-50 hover:bg-gray-50 cursor-pointer transition-all">
+                                <svg class="w-8 h-8 text-green-600" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M24 10.304c0-5.369-5.383-9.738-12-9.738-6.616 0-12 4.369-12 9.738 0 4.814 4.269 8.846 10.036 9.608.391.084.922.258 1.057.592.121.303.079.778.039 1.085l-.171 1.027c-.053.303-.242 1.186 1.039.647 1.281-.54 6.911-4.069 9.428-6.967 1.739-1.907 2.572-3.843 2.572-5.992z"/>
+                                </svg>
+            <!-- Modal ตัวอย่างคำอวยพร -->
+    <div id="examplesModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="min-h-screen px-4 flex items-center justify-center">
+            <div class="glass-card rounded-2xl p-8 max-w-lg w-full fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold">💝 ตัวอย่างคำอวยพร</h2>
+                    <button onclick="closeExamples()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="cursor-pointer hover:bg-gray-50 p-4 rounded-lg" onclick="useExample(0)">
+                        <p class="text-gray-800">สวัสดีปีใหม่ 2025 🎉<br>
+                        ขออวยพรให้เป็นปีที่เต็มไปด้วยความสุข สุขภาพแข็งแรง<br>
+                        มีความสำเร็จในทุกด้าน ทั้งหน้าที่การงานและครอบครัว<br>
+                        ขอให้โชคดี มีแต่สิ่งดีๆ เข้ามาในชีวิตตลอดปีและตลอดไป ✨</p>
+                    </div>
+                    <div class="cursor-pointer hover:bg-gray-50 p-4 rounded-lg" onclick="useExample(1)">
+                        <p class="text-gray-800">Happy New Year 2025! 🎊<br>
+                        ขอให้ปีใหม่นี้เป็นปีที่สดใส<br>
+                        มีความสุขกาย สบายใจ<br>
+                        การงานก้าวหน้า การเงินคล่องตัว<br>
+                        รักษาสุขภาพดีๆ นะคะ/ครับ 🌈</p>
+                    </div>
+                    <div class="cursor-pointer hover:bg-gray-50 p-4 rounded-lg" onclick="useExample(2)">
+                        <p class="text-gray-800">สวัสดีปีใหม่ 2025 จ้า 🎆<br>
+                        ปีเก่าผ่านไป ปีใหม่เข้ามา<br>
+                        ขอให้ชีวิตสดใส มีแต่รอยยิ้ม<br>
+                        ทำอะไรก็สำเร็จสมหวัง<br>
+                        มีความสุขรอบด้าน ร่ำรวยเงินทอง<br>
+                        แคล้วคลาดปลอดภัย ตลอดปีและตลอดไป 💝</p>
+                    </div>
+                </div>
+                <div class="text-center text-sm text-gray-500 mt-4">
+                    คลิกที่ข้อความเพื่อใช้ตัวอย่าง
+                </div>
             </div>
-
-            <div class="form-group">
-                <label>อัพโหลดรายชื่อกลุ่ม (Excel):</label>
-                <input type="file" id="line-groups" accept=".xlsx,.xls">
-            </div>
-
-            <div class="recipient-list" id="line-recipients"></div>
-        </div>
-
-        <div class="panel" id="telegram-panel">
-            <div class="form-group">
-                <label>Telegram Bot Token:</label>
-                <input type="text" id="telegram-token" placeholder="กรอก Telegram Bot Token">
-            </div>
-
-            <div class="form-group">
-                <label>อัพโหลดรายชื่อผู้รับ (Excel):</label>
-                <input type="file" id="telegram-users" accept=".xlsx,.xls">
-            </div>
-
-            <div class="recipient-list" id="telegram-recipients"></div>
-        </div>
-
-        <div class="panel" id="settings-panel">
-            <div class="form-group">
-                <label>เลือกการ์ด:</label>
-                <select id="card-template">
-                    <option value="template1">การ์ดแบบที่ 1 - ดอกไม้</option>
-                    <option value="template2">การ์ดแบบที่ 2 - ดาว</option>
-                    <option value="template3">การ์ดแบบที่ 3 - พลุ</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>ข้อความอวยพร:</label>
-                <textarea id="message" placeholder="พิมพ์ข้อความอวยพรที่นี่...">สวัสดีปีใหม่ 2025 🎉
-ขออวยพรให้ท่านและครอบครัวมีความสุข 
-สุขภาพแข็งแรง โชคดีตลอดปีและตลอดไป 🙏</textarea>
-            </div>
-
-            <div class="form-group">
-                <label>กำหนดเวลาส่ง:</label>
-                <input type="datetime-local" id="schedule-time">
-            </div>
-        </div>
-
-        <div class="preview-card">
-            <h3>ตัวอย่างการ์ด</h3>
-            <div id="card-preview"></div>
-        </div>
-
-        <button class="button" id="send-button">ส่งการ์ดอวยพร</button>
-
-        <div class="progress-container" id="progress-container">
-            <div class="progress-bar">
-                <div class="progress" id="progress"></div>
-            </div>
-            <p id="progress-text">กำลังส่ง: 0%</p>
         </div>
     </div>
 
     <script>
-        // Tab switching
-        document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        // ฟังก์ชันจัดการ Modal ตัวอย่างคำอวยพร
+        function showExamples() {
+            document.getElementById('examplesModal').classList.remove('hidden');
+        }
+
+        function closeExamples() {
+            document.getElementById('examplesModal').classList.add('hidden');
+        }
+
+        function useExample(index) {
+            const examples = [
+                `สวัสดีปีใหม่ 2025 🎉\nขออวยพรให้เป็นปีที่เต็มไปด้วยความสุข สุขภาพแข็งแรง\nมีความสำเร็จในทุกด้าน ทั้งหน้าที่การงานและครอบครัว\nขอให้โชคดี มีแต่สิ่งดีๆ เข้ามาในชีวิตตลอดปีและตลอดไป ✨`,
                 
-                tab.classList.add('active');
-                document.getElementById(`${tab.dataset.tab}-panel`).classList.add('active');
-            });
-        });
-
-        // File upload handling
-        document.getElementById('line-groups').addEventListener('change', handleFileUpload);
-        document.getElementById('telegram-users').addEventListener('change', handleFileUpload);
-
-        function handleFileUpload(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, {type: 'array'});
-                const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                const jsonData = XLSX.utils.sheet_to_json(firstSheet);
-
-                const recipientList = event.target.id === 'line-groups' 
-                    ? document.getElementById('line-recipients')
-                    : document.getElementById('telegram-recipients');
-
-                recipientList.innerHTML = '';
-                jsonData.forEach(row => {
-                    const div = document.createElement('div');
-                    div.className = 'recipient';
-                    div.innerHTML = `
-                        <span>${row.name || row.group || row.username}</span>
-                        <button class="remove-btn">ลบ</button>
-                    `;
-                    recipientList.appendChild(div);
-                });
-            };
-
-            reader.readAsArrayBuffer(file);
-        }
-
-        // Card preview
-        function updatePreview() {
-            const template = document.getElementById('card-template').value;
-            const message = document.getElementById('message').value;
-            const preview = document.getElementById('card-preview');
-
-            // Simple preview implementation
-            preview.innerHTML = `
-                <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 5px; text-align: center;">
-                    <div style="font-size: 1.2rem; margin-bottom: 1rem;">🎊 ${template} 🎊</div>
-                    <div style="white-space: pre-line;">${message}</div>
-                </div>
-            `;
-        }
-
-        document.getElementById('card-template').addEventListener('change', updatePreview);
-        document.getElementById('message').addEventListener('input', updatePreview);
-
-        // Initial preview
-        updatePreview();
-
-        // Send button handling
-        document.getElementById('send-button').addEventListener('click', async () => {
-            const progressContainer = document.getElementById('progress-container');
-            const progress = document.getElementById('progress');
-            const progressText = document.getElementById('progress-text');
-
-            progressContainer.style.display = 'block';
+                `Happy New Year 2025! 🎊\nขอให้ปีใหม่นี้เป็นปีที่สดใส\nมีความสุขกาย สบายใจ\nการงานก้าวหน้า การเงินคล่องตัว\nรักษาสุขภาพดีๆ นะคะ/ครับ 🌈`,
+                
+                `สวัสดีปีใหม่ 2025 จ้า 🎆\nปีเก่าผ่านไป ปีใหม่เข้ามา\nขอให้ชีวิตสดใส มีแต่รอยยิ้ม\nทำอะไรก็สำเร็จสมหวัง\nมีความสุขรอบด้าน ร่ำรวยเงินทอง\nแคล้วคลาดปลอดภัย ตลอดปีและตลอดไป 💝`
+            ];
             
-            // Simulate sending progress
-            let percent = 0;
-            const interval = setInterval(() => {
-                percent += 5;
-                progress.style.width = `${percent}%`;
-                progressText.textContent = `กำลังส่ง: ${percent}%`;
+            document.getElementById('message').value = examples[index];
+            closeExamples();
+        }
 
-                if (percent >= 100) {
-                    clearInterval(interval);
-                    alert('ส่งการ์ดอวยพรเรียบร้อยแล้ว!');
-                    progressContainer.style.display = 'none';
-                }
-            }, 200);
-        });
+        // ฟังก์ชันจัดการ Modal วิธีใช้งาน
+        function showGuide() {
+            document.getElementById('guideModal').classList.remove('hidden');
+        }
 
-        // Remove recipient
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-btn')) {
-                e.target.parentElement.remove();
-            }
+        function closeGuide() {
+            document.getElementById('guideModal').classList.add('hidden');
+        }
+
+        // ฟังก์ชันจัดการ Form
+        document.getElementById('greetingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('ระบบได้รับคำอวยพรของคุณแล้ว และจะส่งตามเวลาที่กำหนด');
         });
     </script>
 </body>
-</html>
+</html>="ml-2">Line</span>
+                            </div>
+                        </label>
+                        <label class="flex-1">
+                            <input type="radio" name="platform" value="telegram"
+                                   class="sr-only peer">
+                            <div class="flex items-center justify-center p-4 border-2 rounded-lg peer-checked:border-blue-500 peer-checked:bg-blue-50 hover:bg-gray-50 cursor-pointer transition-all">
+                                <svg class="w-8 h-8 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.161c-.18 1.897-.962 6.502-1.359 8.627-.168.9-.5 1.201-.82 1.23-.697.064-1.226-.461-1.901-.903-1.056-.692-1.653-1.123-2.678-1.799-1.185-.781-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.139-5.062 3.345-.479.329-.913.489-1.302.481-.428-.008-1.252-.241-1.865-.44-.751-.244-1.349-.374-1.297-.789.027-.216.324-.437.893-.663 3.498-1.524 5.831-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                                </svg>
+                                <span class="ml-2">Telegram</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ข้อมูลผู้รับ -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2" for="recipientId">ID ผู้รับ</label>
+                    <div class="mt-1 relative rounded-lg">
+                        <input type="text" id="recipientId" 
+                               class="block w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                               placeholder="เช่น @username หรือ LINE ID">
+                    </div>
+                </div>
+
+                <!-- เลือกการ์ด -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">เลือกการ์ด</label>
+                    <div class="grid grid-cols-2 gap-4">
+                        <label class="relative">
+                            <input type="radio" name="card" value="1" class="sr-only peer" checked>
+                            <div class="border-2 rounded-lg overflow-hidden peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-500">
+                                <img src="/api/placeholder/400/300" alt="การ์ด 1" class="w-full h-36 object-cover">
+                            </div>
+                            <span class="block text-center text-sm mt-1">ดอกไม้สดใส</span>
+                        </label>
+                        <label class="relative">
+                            <input type="radio" name="card" value="2" class="sr-only peer">
+                            <div class="border-2 rounded-lg overflow-hidden peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-500">
+                                <img src="/api/placeholder/400/300" alt="การ์ด 2" class="w-full h-36 object-cover">
+                            </div>
+                            <span class="block text-center text-sm mt-1">พลุดอกไม้ไฟ</span>
+                        </label>
+                        <label class="relative">
+                            <input type="radio" name="card" value="3" class="sr-only peer">
+                            <div class="border-2 rounded-lg overflow-hidden peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-500">
+                                <img src="/api/placeholder/400/300" alt="การ์ด 3" class="w-full h-36 object-cover">
+                            </div>
+                            <span class="block text-center text-sm mt-1">หิมะสวยงาม</span>
+                        </label>
+                        <label class="relative">
+                            <input type="radio" name="card" value="4" class="sr-only peer">
+                            <div class="border-2 rounded-lg overflow-hidden peer-checked:border-blue-500 peer-checked:ring-2 peer-checked:ring-blue-500">
+                                <img src="/api/placeholder/400/300" alt="การ์ด 4" class="w-full h-36 object-cover">
+                            </div>
+                            <span class="block text-center text-sm mt-1">ของขวัญปีใหม่</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- ข้อความอวยพร -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">ข้อความอวยพร</label>
+                    <div class="relative">
+                        <textarea id="message" rows="4" 
+                                  class="block w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                  placeholder="เขียนคำอวยพรของคุณที่นี่..."></textarea>
+                        <button type="button" onclick="showExamples()"
+                                class="absolute top-2 right-2 px-3 py-1 bg-gray-100 text-sm rounded hover:bg-gray-200">
+                            ดูตัวอย่าง
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ตั้งเวลาส่ง -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">เวลาส่ง</label>
+                    <input type="datetime-local" 
+                           class="block w-full px-4 py-3 border-2 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           value="2024-12-31T23:59">
+                </div>
+
+                <!-- ปุ่มส่ง -->
+                <button type="submit" 
+                        class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200 flex items-center justify-center space-x-2">
+                    <span>ส่งคำอวยพร</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal วิธีใช้งาน -->
+    <div id="guideModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+        <div class="min-h-screen px-4 flex items-center justify-center">
+            <div class="glass-card rounded-2xl p-8 max-w-lg w-full fade-in">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-semibold">📝 วิธีใช้งาน</h2>
+                    <button onclick="closeGuide()" class="text-gray-500 hover:text-gray-700">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-semibold mr-3">1</span>
+                        <p>เลือกแพลตฟอร์มที่ต้องการส่ง (Line หรือ Telegram)</p>
+                    </div>
+                    <div class="flex items-start">
+                        <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-blue-600 font-semibold mr-3">2</span>
+                        <p>กรอก ID ผู้รับให้ถูกต้อง โดยใส่ @ นำหน้าสำหรับ Telegram</p>
+                    </div>
+                    <div class="flex items-start">
+                        <span class

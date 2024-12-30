@@ -236,6 +236,48 @@
                 status.style.display = 'none';
             }, 5000);
         }
+
+                const API_URL = 'http://localhost:3000/api';  // URL ของ backend server
+        
+        // ฟังก์ชันส่งข้อความผ่าน Line
+        async function sendLineMessage(to, text) {
+            try {
+                const response = await fetch(`${API_URL}/send-line`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ to, message: text })
+                });
+                
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+                return true;
+            } catch (error) {
+                console.error('Line API Error:', error);
+                throw error;
+            }
+        }
+
+        // ฟังก์ชันส่งข้อความผ่าน Telegram
+        async function sendTelegramMessage(to, text) {
+            try {
+                const response = await fetch(`${API_URL}/send-telegram`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ chatId: to, message: text })
+                });
+                
+                const data = await response.json();
+                if (!data.success) throw new Error(data.error);
+                return true;
+            } catch (error) {
+                console.error('Telegram API Error:', error);
+                throw error;
+            }
+        }
     </script>
 </body>
 </html>
